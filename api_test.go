@@ -5,8 +5,8 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/maddiesch/api"
-	"github.com/maddiesch/api/middleware"
+	api "github.com/planningcenter/lambda-api"
+	"github.com/planningcenter/lambda-api/middleware"
 	"github.com/stretchr/testify/assert"
 )
 

@@ -4,7 +4,6 @@ import (
 	"context"
 	"crypto/rand"
 	"fmt"
-	"log"
 	"net/http"
 	"strconv"
 	"time"
@@ -17,8 +16,6 @@ var (
 // RequestID adds a HTTP request ID
 func RequestID(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		log.Println("request-id")
-
 		data := make([]byte, 4)
 		rand.Read(data)
 		timestamp := strconv.FormatInt(time.Now().UnixNano(), 32)

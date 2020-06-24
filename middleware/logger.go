@@ -16,8 +16,6 @@ var (
 // Logger handles HTTP requests by logging the HTTP request
 func Logger(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		log.Println("logger")
-
 		start := time.Now()
 
 		id := GetRequestID(r.Context())
