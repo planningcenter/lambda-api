@@ -56,3 +56,22 @@ func TestAPI(t *testing.T) {
 		assert.Equal(t, "85", w.HeaderMap.Get("Content-Length"))
 	})
 }
+
+func ExampleAPI() {
+	app := api.New()
+
+	app.Draw(func(router api.Router) {
+		router.Add(middleware.Recovery, middleware.RequestID, middleware.Logger)
+
+		router.Handle("GET", "/", func(w http.ResponseWriter, req *http.Request) {
+			w.WriteHeader(http.StatusNoContent)
+		})
+	})
+
+	server := &http.Server{
+		Addr:    ":8080",
+		Handler: app,
+	}
+
+	server.ListenAndServe()
+}

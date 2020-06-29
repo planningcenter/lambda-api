@@ -13,7 +13,9 @@ var (
 	loggerContextValueKey = &struct{}{}
 )
 
-// Logger handles HTTP requests by logging the HTTP request
+// Logger handles HTTP requests by logging the HTTP request. Additionally, it
+// assigns a log.Logger instance into the context before passing it to the next
+// middleware.
 func Logger(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		start := time.Now()
@@ -30,7 +32,8 @@ func Logger(next http.Handler) http.Handler {
 	})
 }
 
-// GetLogger returns the logger
+// GetLogger returns the logger stored in the context. It will panic if the
+// logger instance can't be found in given the context.
 func GetLogger(ctx context.Context) *log.Logger {
 	if logger, ok := ctx.Value(loggerContextValueKey).(*log.Logger); ok {
 		return logger

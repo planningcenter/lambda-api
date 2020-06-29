@@ -1,3 +1,4 @@
+// Package api provides a simple muxing & middleware layer for a http.Handler
 package api
 
 import (
@@ -8,15 +9,12 @@ import (
 	"github.com/gorilla/mux"
 )
 
-// API contains a single API
+// API contains a single API's muxer, middleware, and handler.
 type API struct {
-	mux *mux.Router
-
-	mu sync.Mutex
-
-	context func(context.Context) context.Context
-
-	hasDrawn bool
+	mux      *mux.Router                           // Routing mux
+	mu       sync.Mutex                            // Execution mutex
+	context  func(context.Context) context.Context // Provides a new context for every request
+	hasDrawn bool                                  // Stores whether the Draw function has been called
 }
 
 var (
@@ -32,7 +30,8 @@ var (
 		})
 	}))
 
-	// DefaultMethodNotAllowedHandler is the default handler for a 405 Method Not Allowed
+	// DefaultMethodNotAllowedHandler is the default handler for a 405 Method Not
+	// Allowed
 	DefaultMethodNotAllowedHandler = http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusMethodNotAllowed)
 
@@ -45,7 +44,8 @@ var (
 	}))
 )
 
-// New returns a new API instance
+// New returns a new API instance with the default configuration for the
+// NotFoundHandler and MethodNotAllowedHandler
 func New() *API {
 	router := mux.NewRouter()
 	router.NotFoundHandler = DefaultNotFoundHandler
@@ -59,7 +59,7 @@ func New() *API {
 	}
 }
 
-// Draw allows routes to be defined on the API
+// Draw allows routes to be defined on the API using the passed Router
 func (a *API) Draw(fn func(Router), middleware ...MiddlewareFunc) {
 	a.mu.Lock()
 	defer a.mu.Unlock()
