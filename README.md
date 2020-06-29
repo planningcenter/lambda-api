@@ -6,6 +6,8 @@
 
 ```golang
 import (
+  "net/http"
+
   api "github.com/planningcenter/lambda-api"
  "github.com/planningcenter/lambda-api/middleware"
 )
